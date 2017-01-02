@@ -1,9 +1,9 @@
+from flask import Flask
 import os
 import psycopg2
 import urlparse
 
 app = Flask(__name__)
-app.config.from_object('config')
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse(os.environ["DATABASE_URL"])
