@@ -16,7 +16,7 @@ def index():
 def hello():
     return 'Hello, World'
 
-@app.route('db')
+@app.route('/db')
 def db():
     conn = psycopg2.connect(
         database=url.path[1:],
