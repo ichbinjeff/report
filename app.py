@@ -16,8 +16,8 @@ def index():
 def hello():
     return 'Hello, World'
 
-@app.route('/db')
-def db():
+@app.route('/createTable')
+def createTable():
     conn = psycopg2.connect(
         database=url.path[1:],
         user=url.username,
@@ -26,17 +26,66 @@ def db():
         port=url.port
     )
     cur = conn.cursor()
-    cur.execute('''SELECT * FROM COMPANY;''')
-    rows = cur.fetchall()
-    rst = ""
-    for row in rows:
-        rst += "ID = ", row[0]
-        rst += "NAME = ", row[1]
-        rst += "ADDRESS = ", row[2]
-        rst += "SALARY = ", row[3], "\n"
-    print "Operation done successfully"
+    cur.execute('''CREATE TABLE COMPANY
+           (ID INT PRIMARY KEY     NOT NULL,
+           NAME           TEXT    NOT NULL,
+           AGE            INT     NOT NULL,
+           ADDRESS        CHAR(50),
+           SALARY         REAL);''')
+    print "Table created successfully"
 
     conn.commit()
+    conn.close()
+    return 'everything is good'
+
+@app.route('/insert')
+def insert():
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cur = conn.cursor()
+    cur.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
+          VALUES (1, 'Paul', 32, 'California', 20000.00 )");
+
+    cur.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
+          VALUES (2, 'Allen', 25, 'Texas', 15000.00 )");
+
+    cur.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
+          VALUES (3, 'Teddy', 23, 'Norway', 20000.00 )");
+
+    cur.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
+          VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 )");
+
+    conn.commit()
+    print "Records created successfully"
+    conn.close()
+    return 'inserted data into db'
+
+
+
+@app.route('/select')
+def select():
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cur = conn.cursor()
+    cur.execute('''SELECT id, name, address, salary FROM COMPANY;''')
+    rows = cur.fetchall()
+    rst = "rst"
+    for row in rows:
+        rst += "ID = " + row[0]
+        rst += "NAME = " + row[1]
+        rst += "ADDRESS = " + row[2]
+        rst += "SALARY = " + row[3] + "\n"
+    print "Operation done successfully"
     conn.close()
     return rst
 
