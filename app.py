@@ -81,11 +81,10 @@ def select():
     rows = cur.fetchall()
     rst = "rst"
     for row in rows:
-       print "ID = ", row[0]
-       print "NAME = ", row[1]
-       print "ADDRESS = ", row[2]
-       print "SALARY = ", row[3], "\n"
-
+        rst += "ID = " + str(row[0]) + "\n"
+        rst += "NAME = " + str(row[1]) + "\n"
+        rst += "ADDRESS = " + str(row[2])+ "\n"
+        rst += "SALARY = " + str(row[3]) + "\n"
     print "Operation done successfully"
     conn.close()
     return rst
