@@ -26,15 +26,17 @@ def db():
         port=url.port
     )
     cur = conn.cursor()
-    cur.execute('''CREATE TABLE COMPANY
-           (ID INT PRIMARY KEY     NOT NULL,
-           NAME           TEXT    NOT NULL,
-           AGE            INT     NOT NULL,
-           ADDRESS        CHAR(50),
-           SALARY         REAL);''')
-    print "Table created successfully"
+    cur.execute('''SELECT * FROM COMPANY;''')
+    rows = cur.fetchall()
+    rst = ""
+    for row in rows:
+        rst += "ID = ", row[0]
+        rst += "NAME = ", row[1]
+        rst += "ADDRESS = ", row[2]
+        rst += "SALARY = ", row[3], "\n"
+    print "Operation done successfully"
 
     conn.commit()
     conn.close()
-    return 'everything is good'
+    return rst
 
