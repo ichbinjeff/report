@@ -1,0 +1,13 @@
+<!doctype html>
+<title>Result Page</title>
+{% block body %}
+result page
+  {% for entry in entries %}
+    <div>
+      <p>{{ entry[1] }}</p>
+      <p>{{ entry[2] }}</p>
+      <p>{{ entry[3] }}</p>
+      <p>{{ entry[4] }}</p>
+    </div>
+  {% endfor %}
+{% endblock %}

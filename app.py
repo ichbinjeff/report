@@ -73,6 +73,24 @@ def insert():
 def form():
     return render_template('form.html')
 
+@app.route('/result')
+def result():
+    name = request.args.get('name')
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cur = conn.cursor()
+    sql = 'SELECT id, name, address, salary FROM COMPANY;'
+    cur.execute(sql)
+    entries = cur.fetchall()
+    return render_template('result.html', entries=entries)
+
+
+
 @app.route('/select')
 def select():
     name = request.args.get('name')
