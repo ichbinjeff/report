@@ -1,4 +1,7 @@
 from flask import Flask
+from flask import render_template
+from flask import request
+
 import os
 import psycopg2
 import urlparse
@@ -26,7 +29,7 @@ def createTable():
         port=url.port
     )
     cur = conn.cursor()
-    cur.execute('''CREATE TABLE COMPANY
+    cur.execute('''DROP TABLE IF EXISTS COMPANY; CREATE TABLE COMPANY
            (ID INT PRIMARY KEY     NOT NULL,
            NAME           TEXT    NOT NULL,
            AGE            INT     NOT NULL,
@@ -66,9 +69,13 @@ def insert():
     return 'inserted data into db'
 
 
+@app.route('/form')
+def form():
+    return render_template('form.html')
 
 @app.route('/select')
 def select():
+    name = request.args.get('name')
     conn = psycopg2.connect(
         database=url.path[1:],
         user=url.username,
@@ -77,7 +84,8 @@ def select():
         port=url.port
     )
     cur = conn.cursor()
-    cur.execute('''SELECT id, name, address, salary FROM COMPANY;''')
+    sql = 'SELECT id, name, address, salary FROM COMPANY WHERE NAME=' + '\'' + name + '\'' + ';'
+    cur.execute(sql)
     rows = cur.fetchall()
     rst = "rst"
     for row in rows:
@@ -87,5 +95,5 @@ def select():
         rst += "SALARY = " + str(row[3]) + "\n"
     print "Operation done successfully"
     conn.close()
-    return rst
+    return name + rst
 
